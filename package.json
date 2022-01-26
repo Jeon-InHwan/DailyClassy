@@ -1,0 +1,27 @@
+{
+  "name": "dailyclassy",
+  "version": "1.0.0",
+  "description": "DailyClassy: built with Node.JS",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jeon-InHwan/DailyClassy.git"
+  },
+  "author": "zenstacker <zenstacker@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jeon-InHwan/DailyClassy/issues"
+  },
+  "homepage": "https://github.com/Jeon-InHwan/DailyClassy#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/node": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "nodemon": "^2.0.15"
+  }
+}
