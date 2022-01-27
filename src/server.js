@@ -1,8 +1,18 @@
 import express from "express";
+import morgan from "morgan";
+import globalRouter from "./routers/globalRouter";
+import userRouter from "./routers/userRouter";
+import boardRouter from "./routers/boardRouter";
 
 const PORT = 4000;
 
 const app = express();
+const loggerMiddleware = morgan("dev");
+app.use(loggerMiddleware);
+
+app.use("/", globalRouter);
+app.use("/boards", boardRouter);
+app.use("/users", userRouter);
 
 const handleListening = () => {
   console.log(`Sever is listening on port http://localhost:${PORT} 🚀`);
