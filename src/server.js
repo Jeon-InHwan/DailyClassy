@@ -8,8 +8,11 @@ const PORT = 4000;
 
 const app = express();
 const loggerMiddleware = morgan("dev");
-app.use(loggerMiddleware);
 
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+
+app.use(loggerMiddleware);
 app.use("/", globalRouter);
 app.use("/boards", boardRouter);
 app.use("/users", userRouter);

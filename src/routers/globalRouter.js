@@ -1,15 +1,12 @@
 import express from "express";
-import {
-  trendingBoardForHome,
-  handleSearch,
-} from "../controllers/boardController";
-import { handleJoin, handleLogin } from "../controllers/userController";
+import { trendingBoardForHome, search } from "../controllers/boardController";
+import { join, login } from "../controllers/userController";
 
 const globalRouter = express.Router();
 
 globalRouter.get("/", trendingBoardForHome);
-globalRouter.get("/join", handleJoin);
-globalRouter.get("/login", handleLogin);
-globalRouter.get("/search", handleSearch);
+globalRouter.get("/join", join);
+globalRouter.get("/login", login);
+globalRouter.get("/search", search);
 
 export default globalRouter;
