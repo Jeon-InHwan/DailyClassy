@@ -1,9 +1,11 @@
 extends base.pug
+include mixins/board.pug
 
-block head 
-    title Home | Daily Classy
 
-block content 
-    h1 Home
+block content
+    each uploaded in boards 
+        +board(uploaded)
+    else    
+        li  Noting Found! 
 
 

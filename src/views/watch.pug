@@ -1,8 +1,12 @@
 extends base.pug
 
-block head 
-    title Watch | Daily Classy
-
-block content 
-    h1 Watch Board ##{params}
+block content
+    div 
+        h3=board.title
+        li #{board.comments}개의 댓글
+        li 조회수 #{board.hitcounts}
+    div 
+        a(href=`${board.id}/edit`) Edit Board &rarr;
+        
+    
 
