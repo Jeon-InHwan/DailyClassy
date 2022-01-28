@@ -39,21 +39,29 @@ export const watch = (req, res) => {
   let board = boards[req.params.id - 1];
 
   return res.render("watch.pug", {
-    pageTitle: `Watch ${board.title}`,
+    pageTitle: `Watching: ${board.title}`,
     fakeUser: fakeUser,
     board: board,
   });
 };
 
-// localhost:4000/boards/:id/edit
-export const edit = (req, res) => {
+// localhost:4000/boards/:id/edit (GET)
+export const getEdit = (req, res) => {
   let board = boards[req.params.id - 1];
 
   return res.render("editBoard.pug", {
-    pageTitle: `Edit ${board.title}`,
+    pageTitle: `Editing: ${board.title}`,
     fakeUser: fakeUser,
     board: board,
   });
+};
+
+// localhost:4000/boards/:id/edit (POST)
+export const postEdit = (req, res) => {
+  const { id } = req.params;
+  const title = req.body.title;
+  boards[id - 1].title = title;
+  return res.redirect(`/boards/${id}`);
 };
 
 // localhost:4000/boards/upload

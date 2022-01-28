@@ -1,4 +1,9 @@
 extends base.pug
 
 block content
+    h4 Change title of the board
+    form(method="POST")
+        input(placeholder="New board title", value=board.title name="title") 
+        input(type="submit", value="Save")
+
     

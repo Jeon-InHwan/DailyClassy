@@ -2,7 +2,8 @@ extends base.pug
 
 block content
     div 
-        h3=board.title
+        h3
+            a(href=`/boards/${board.id}`)=board.title
         li #{board.comments}개의 댓글
         li 조회수 #{board.hitcounts}
     div 
