@@ -1,0 +1,9 @@
+mixin post(info)
+    div 
+        h4
+            a(href=`/posts/${info.id}`)=info.title
+        li #{info.comments} コメント
+        li 再生数 #{info.hitcounts}
+
+
+

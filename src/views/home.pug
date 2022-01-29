@@ -1,10 +1,10 @@
 extends base.pug
-include mixins/board.pug
+include mixins/post.pug
 
 
 block content
-    each uploaded in boards 
-        +board(uploaded)
+    each uploaded in posts 
+        +post(uploaded)
     else    
         li  Noting Found! 
 

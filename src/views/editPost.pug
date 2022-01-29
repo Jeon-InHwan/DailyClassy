@@ -1,0 +1,9 @@
+extends base.pug
+
+block content
+    h4 Change title of the post
+    form(method="POST")
+        input(placeholder="New post title", value=post.title name="title") 
+        input(type="submit", value="Save")
+
+    
