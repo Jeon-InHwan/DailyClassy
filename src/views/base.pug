@@ -7,14 +7,10 @@ html(lang="ko")
         header 
             nav 
                 ul 
-                    if fakeUser.loggedIn
-                        li 
-                            a(href="/posts/upload") Upload
-                        li 
-                            a(href="/logout") Logout
-                    else 
-                        li 
-                            a(href="/login") Login
+                    li 
+                        a(href="/posts/upload") Upload
+                        
+ 
             h1=pageTitle
         main 
             block content
