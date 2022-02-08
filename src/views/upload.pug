@@ -1,9 +1,12 @@
 extends base.pug
 
 block content 
-    h4 Upload a post
+    
+    if errorMessage
+        span=errorMessage
+
     form(method="POST")
-        input(type="text", placeholder="Title", name="title", required)
-        input(type="text", placeholder="Content", name="content", required)
+        input(type="text", placeholder="Title", name="title", maxlength=50, minlength=2, required)
+        input(type="text", placeholder="Content", name="content", maxlength=1000, minlength=2, required)
         input(type="text", placeholder="Hashtags, separated by comma", name="hashtags", required)
         input(type="submit", value="Post")

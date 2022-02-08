@@ -4,6 +4,8 @@ mixin post(info)
             a(href=`/posts/${info.id}`)=info.title
         li #{info.meta.rating} 点
         li #{info.meta.views} views
+        small=info.createdAt
+        hr
 
 
 

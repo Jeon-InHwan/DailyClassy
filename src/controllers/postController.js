@@ -41,17 +41,21 @@ export const getUpload = (req, res) => {
 // localhost:4000/posts/upload (POST)
 export const postUpload = async (req, res) => {
   const { title, content, hashtags } = req.body;
-  const post = new Post({
-    title: title,
-    content: content,
-    createdAt: Date.now(),
-    hashtags: hashtags.split(",").map((word) => `#${word}`),
-    meta: {
-      views: 0,
-      rating: 0,
-    },
-  });
-  const postFromDatabase = await post.save();
+  try {
+    const post = new Post({
+      title: title,
+      content: content,
+      hashtags: hashtags.split(",").map((word) => `#${word}`),
+    });
+    const postFromDatabase = await post.save();
+  } catch (error) {
+    console.log(error);
+    return res.render("upload.pug", {
+      pageTitle: "Upload Post",
+      errorMessage: error._message,
+    });
+  }
+
   return res.redirect("/");
 };
 
