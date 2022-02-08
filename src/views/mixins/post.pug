@@ -2,8 +2,13 @@ mixin post(info)
     div 
         h4
             a(href=`/posts/${info.id}`)=info.title
-        li #{info.meta.rating} 点
-        li #{info.meta.views} views
+        div #{info.meta.rating}/5.0
+        div #{info.meta.views > 1 ? info.meta.views + " views" : info.meta.views + " view"}
+        each hashtag in info.hashtags 
+            span #{hashtag + " "} 
+        else 
+            h4 "Can't find any hastag"
+        br
         small=info.createdAt
         hr
 

@@ -11,23 +11,48 @@ export const home = async (req, res) => {
 };
 
 // localhost:4000/posts/:id
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
+
+  if (!post) {
+    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+  }
+
   return res.render("watch.pug", {
-    pageTitle: `Watching:`,
+    pageTitle: post.title,
+    post: post,
   });
 };
 
 // localhost:4000/posts/:id/edit (GET)
-export const getEdit = (req, res) => {
+export const getEdit = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
+
+  if (!post) {
+    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+  }
+
   return res.render("editPost.pug", {
-    pageTitle: `Editing:`,
+    pageTitle: `Edit 「${post.title}」`,
+    post: post,
   });
 };
 
 // localhost:4000/posts/:id/edit (POST)
-export const postEdit = (req, res) => {
+export const postEdit = async (req, res) => {
   const { id } = req.params;
-  const title = req.body.title;
+  const { title, content, hashtags } = req.body;
+  const post = await Post.exists({ _id: id });
+  if (!post) {
+    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+  }
+  await Post.findByIdAndUpdate(id, {
+    title: title,
+    content: content,
+    hashtags: Post.formatHashtags(hashtags),
+  });
   return res.redirect(`/posts/${id}`);
 };
 
@@ -45,7 +70,7 @@ export const postUpload = async (req, res) => {
     const post = new Post({
       title: title,
       content: content,
-      hashtags: hashtags.split(",").map((word) => `#${word}`),
+      hashtags: Post.formatHashtags(hashtags),
     });
     const postFromDatabase = await post.save();
   } catch (error) {

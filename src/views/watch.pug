@@ -3,9 +3,9 @@ extends base.pug
 block content
     div 
         h3
-            a(href=`/posts/${post.id}`)=post.title
-        li #{post.comments} コメント
-        li 再生数 #{post.hitcounts}
+            a(href=`/posts/${post._id}`)=post.title
+        p=post.content
+        small=post.createdAt
     div 
         a(href=`${post.id}/edit`) Edit Post &rarr;
         

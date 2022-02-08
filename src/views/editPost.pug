@@ -1,9 +1,11 @@
 extends base.pug
 
 block content
-    h4 Change title of the post
+    h4 Update Post
     form(method="POST")
-        input(placeholder="New post title", value=post.title name="title") 
+        input(placeholder="Post Title", value=post.title name="title", required) 
+        input(type="text", placeholder="Content", name="content", value=post.content, maxlength=1000, minlength=2, required)
+        input(type="text", placeholder="Hashtags, separated by comma", name="hashtags", value=post.hashtags.join(), required)
         input(type="submit", value="Save")
 
     

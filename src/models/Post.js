@@ -23,5 +23,19 @@ const postSchema = new mongoose.Schema({
   },
 });
 
+/*
+postSchema.pre("save", async function () {
+  this.hashtags = this.hashtags[0]
+    .split(",")
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
+});
+*/
+
+postSchema.static("formatHashtags", function (hashtags) {
+  return hashtags
+    .split(",")
+    .map((word) => (word.startsWith("#") ? word : `#${word}`));
+});
+
 const Post = mongoose.model("Post", postSchema);
 export default Post;
