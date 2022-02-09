@@ -5,9 +5,18 @@ block content
         h3
             a(href=`/posts/${post._id}`)=post.title
         p=post.content
+        each hashtag in post.hashtags 
+            span #{hashtag + " "} 
+        else 
+            h4 "Can't find any hastag"
+        br
         small=post.createdAt
+        
     div 
         a(href=`${post.id}/edit`) Edit Post &rarr;
+        br
+        a(href=`${post.id}/delete`) Delete Post &rarr;
+
         
     
 

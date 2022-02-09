@@ -3,7 +3,7 @@ import Post from "../models/Post";
 // localhost:4000
 export const home = async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).sort({ createdAt: "desc" });
     return res.render("home.pug", { pageTitle: "Home", posts });
   } catch (error) {
     return res.render("404.pug", { error });
@@ -84,14 +84,25 @@ export const postUpload = async (req, res) => {
   return res.redirect("/");
 };
 
-// localhost:4000/search
-export const search = (req, res) => {
-  console.log("I'm handleSearch");
-  return res.send("<h1>Search Post</h1>");
+// localhost:4000/search (GET)
+export const search = async (req, res) => {
+  const { keyword } = req.query;
+  let posts = [];
+  if (keyword) {
+    // search
+    posts = await Post.find({
+      title: {
+        $regex: new RegExp(keyword, "i"),
+      },
+    });
+  }
+  return res.render("search.pug", { pageTitle: "Search", posts: posts });
 };
 
 // localhost:4000/posts/:id/delete
-export const deletePost = (req, res) => {
-  console.log(req.params);
-  return res.send(`<h1>Delete post #${req.params.id}</h1>`);
+export const deletePost = async (req, res) => {
+  const { id } = req.params;
+  // delete post
+  await Post.findByIdAndDelete(id);
+  return res.redirect("/");
 };

@@ -1,0 +1,10 @@
+extends base.pug
+
+block content 
+    form(method="POST")
+        input(type="email", name="email", placeholder="Email", maxlength=50, minlength=5, required)
+        input(type="String", name="ID", placeholder="ID", maxlength=12, minlength=5, required)
+        input(type="password", name="password", placeholder="Password", maxlength=12, minlength=5, required)
+        input(type="String", name="name", placeholder="Name", minlength=2, required)
+        input(type="String", name="location", placeholder="Location", minlength=2, required)
+        input(type="submit", value="Join")

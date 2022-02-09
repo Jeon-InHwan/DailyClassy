@@ -1,13 +1,34 @@
+import User from "../models/User";
+
 // localhost:4000/users/edit
 export const edit = (req, res) => {
   console.log("I'm handleEdit");
   return res.send("<h1>Edit User</h1>");
 };
 
-// localhost:4000/join
-export const join = (req, res) => {
-  console.log("I'm handleJoin");
-  return res.send("<h1>Join</h1>");
+// localhost:4000/join (GET)
+export const getJoin = (req, res) => {
+  return res.render("join.pug", { pageTitle: "Join" });
+};
+
+// localhost:4000/join (POST)
+export const postJoin = async (req, res) => {
+  const { email, ID, password, name, location } = req.body;
+
+  try {
+    await User.create({
+      email: email,
+      ID: ID,
+      name: name,
+      password: password,
+      location: location,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.redirect("/join");
+  }
+
+  return res.redirect("/login");
 };
 
 // localhost:4000/login
