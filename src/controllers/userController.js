@@ -61,6 +61,7 @@ export const getLogin = (req, res) => {
 // localhost:4000/login (POST)
 export const postLogin = async (req, res) => {
   const { ID, password } = req.body;
+  // confirm user existing
   const user = await User.findOne({ ID: ID });
   if (!user) {
     return res.status(400).render("login", {
@@ -68,6 +69,7 @@ export const postLogin = async (req, res) => {
       errorMessage: "An account with this ID does not exists!",
     });
   }
+  // compare user password
   const loginValidation = await bcrypt.compare(password, user.password);
   if (!loginValidation) {
     return res.status(400).render("login", {
@@ -75,7 +77,9 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong Password!",
     });
   }
-  // Let user Login
+  // Save user data in session
+  req.session.loggedIn = true;
+  req.session.user = user;
   res.redirect("/");
 };
 
