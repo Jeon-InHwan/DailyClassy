@@ -1,4 +1,5 @@
 import User from "../models/User";
+import bcrypt from "bcrypt";
 
 // localhost:4000/users/edit
 export const edit = (req, res) => {
@@ -13,8 +14,27 @@ export const getJoin = (req, res) => {
 
 // localhost:4000/join (POST)
 export const postJoin = async (req, res) => {
-  const { email, ID, password, name, location } = req.body;
-
+  const { email, ID, password, passwordConfirm, name, location } = req.body;
+  if (password !== passwordConfirm) {
+    return res.status(400).render("join", {
+      pageTitle: "Join",
+      errorMessage: "Password confirmation does not match!",
+    });
+  }
+  const idExists = await User.exists({ ID: ID });
+  if (idExists) {
+    return res.status(400).render("join", {
+      pageTitle: "Join",
+      errorMessage: "This ID is already taken!",
+    });
+  }
+  const emailExists = await User.exists({ email: email });
+  if (emailExists) {
+    return res.status(400).render("join", {
+      pageTitle: "Join",
+      errorMessage: "This Email is already taken!",
+    });
+  }
   try {
     await User.create({
       email: email,
@@ -25,16 +45,38 @@ export const postJoin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.redirect("/join");
+    return res
+      .status(400)
+      .render("join", { pageTitle: "Join", errorMessage: error._message });
   }
 
   return res.redirect("/login");
 };
 
-// localhost:4000/login
-export const login = (req, res) => {
-  console.log("I'm handleLogin");
-  return res.send("<h1>Login</h1>");
+// localhost:4000/login (GET)
+export const getLogin = (req, res) => {
+  return res.render("login.pug", { pageTitle: "Login" });
+};
+
+// localhost:4000/login (POST)
+export const postLogin = async (req, res) => {
+  const { ID, password } = req.body;
+  const user = await User.findOne({ ID: ID });
+  if (!user) {
+    return res.status(400).render("login", {
+      pageTitle: "Login",
+      errorMessage: "An account with this ID does not exists!",
+    });
+  }
+  const loginValidation = await bcrypt.compare(password, user.password);
+  if (!loginValidation) {
+    return res.status(400).render("login", {
+      pageTitle: "Login",
+      errorMessage: "Wrong Password!",
+    });
+  }
+  // Let user Login
+  res.redirect("/");
 };
 
 // localhost:4000/users/logout

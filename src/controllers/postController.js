@@ -16,7 +16,7 @@ export const watch = async (req, res) => {
   const post = await Post.findById(id);
 
   if (!post) {
-    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+    return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
 
   return res.render("watch.pug", {
@@ -31,7 +31,7 @@ export const getEdit = async (req, res) => {
   const post = await Post.findById(id);
 
   if (!post) {
-    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+    return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
 
   return res.render("editPost.pug", {
@@ -46,7 +46,7 @@ export const postEdit = async (req, res) => {
   const { title, content, hashtags } = req.body;
   const post = await Post.exists({ _id: id });
   if (!post) {
-    return res.render("404.pug", { pageTitle: "Post Not Found!" });
+    return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
   await Post.findByIdAndUpdate(id, {
     title: title,
@@ -75,7 +75,7 @@ export const postUpload = async (req, res) => {
     const postFromDatabase = await post.save();
   } catch (error) {
     console.log(error);
-    return res.render("upload.pug", {
+    return res.status(400).render("upload.pug", {
       pageTitle: "Upload Post",
       errorMessage: error._message,
     });
