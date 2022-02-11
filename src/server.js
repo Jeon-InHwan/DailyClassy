@@ -1,10 +1,10 @@
 import express from "express";
 import morgan from "morgan";
-import sesstion from "express-session";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import postRouter from "./routers/postRouter";
-import session from "express-session";
 import { localsMiddleware } from "./middleware";
 
 const app = express();
@@ -19,9 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 // use express-session middleware
 app.use(
   session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.DB_URL,
+    }),
   })
 );
 
