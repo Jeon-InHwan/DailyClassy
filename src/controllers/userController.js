@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 // localhost:4000/users/edit
 export const edit = (req, res) => {
@@ -93,4 +94,50 @@ export const logout = (req, res) => {
 export const profile = (req, res) => {
   console.log("I'm handleProfile");
   return res.send("<h1>My profile</h1>");
+};
+
+// localhost:4000/users/github/start (GET)
+export const startGithubLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    allow_signup: false,
+    scope: "read:user user:email",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+// localhost:4000/users/github/finish (GET)
+export const finishGithubLogin = async (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    client_secret: process.env.GH_SECRET,
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const data = await fetch(finalUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  const json = await data.json();
+  if ("access_token" in json) {
+    // access the API
+    const { access_token } = json;
+    const userRequest = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `token ${access_token}`,
+      },
+    });
+    const userJson = await userRequest.json();
+    console.log(userJson);
+  } else {
+    return res.redirect("/login");
+  }
+  return res.send("JSON.stringify(userJson)");
 };
