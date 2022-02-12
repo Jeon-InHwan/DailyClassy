@@ -11,13 +11,15 @@ html(lang="ko")
                         a(href="/") Home
                     li 
                         a(href="/search") Search
-                    li 
-                        a(href="/posts/upload") Upload
                     if loggedIn
+                        li 
+                            a(href="/posts/upload") Upload
                         li 
                             a(href="/profile") #{loggedInUser.name}'s profile
                         li 
-                            a(href="/logout") Log out
+                            a(href="/users/edit") Edit Profile
+                        li 
+                            a(href="/users/logout") Log out
                     else 
                         li 
                             a(href="/login") Log in

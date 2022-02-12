@@ -2,10 +2,36 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
-// localhost:4000/users/edit
-export const edit = (req, res) => {
-  console.log("I'm handleEdit");
-  return res.send("<h1>Edit User</h1>");
+// localhost:4000/users/:id/edit (GET)
+export const getEdit = (req, res) => {
+  return res.render("edit-profile.pug", { pageTitle: "Edit Profile" });
+};
+
+// localhost:4000/users/:id/edit (POST)
+export const postEdit = async (req, res) => {
+  const { _id } = req.session.user;
+  const { email, name, location } = req.body;
+  // check before update
+  if (email !== req.session.user.email) {
+    const emailExists = await User.exists({ email: email });
+    if (emailExists) {
+      return res.status(400).render("edit-profile", {
+        pageTitle: "Edit Profile",
+        errorMessage: "This email is already taken!",
+      });
+    }
+  }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      email: email,
+      name: name,
+      location: location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
 };
 
 // localhost:4000/join (GET)
@@ -43,6 +69,7 @@ export const postJoin = async (req, res) => {
       name: name,
       password: password,
       location: location,
+      socialLoginOnly: false,
     });
   } catch (error) {
     console.log(error);
@@ -63,7 +90,7 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
   const { ID, password } = req.body;
   // confirm user existing
-  const user = await User.findOne({ ID: ID });
+  const user = await User.findOne({ ID: ID, socialLoginOnly: false });
   if (!user) {
     return res.status(400).render("login", {
       pageTitle: "Login",
@@ -86,8 +113,8 @@ export const postLogin = async (req, res) => {
 
 // localhost:4000/users/logout
 export const logout = (req, res) => {
-  console.log("I'm handleLogout");
-  return res.send("<h1>Logout</h1>");
+  req.session.destroy();
+  return res.redirect("/");
 };
 
 // localhost:4000/users/:id
@@ -129,15 +156,48 @@ export const finishGithubLogin = async (req, res) => {
   if ("access_token" in json) {
     // access the API
     const { access_token } = json;
-    const userRequest = await fetch("https://api.github.com/user", {
+    const apiUrl = "https://api.github.com";
+    // get user data
+    const userRequest = await fetch(`${apiUrl}/user`, {
       headers: {
         Authorization: `token ${access_token}`,
       },
     });
     const userJson = await userRequest.json();
-    console.log(userJson);
+    // get user email
+    const emailRequest = await fetch(`${apiUrl}/user/emails`, {
+      headers: {
+        Authorization: `token ${access_token}`,
+      },
+    });
+    const emailJson = await emailRequest.json();
+    // console.log(userJson);
+    // console.log(emailJson);
+    // find primary && verified email
+    const emailObj = emailJson.find(
+      (email) => email.primary === true && email.verified === true
+    );
+    if (!emailObj) {
+      return res.redirect("/login");
+    }
+    // find local user with given email from github
+    let user = await User.findOne({ email: emailObj.email });
+    if (!user) {
+      // create an account based on github user information
+      user = await User.create({
+        email: emailObj.email,
+        ID: userJson.name,
+        password: "",
+        name: userJson.login,
+        location: userJson.location,
+        socialLoginOnly: true,
+        avatarUrl: userJson.avatar_url,
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return res.redirect("/login");
   }
-  return res.send("JSON.stringify(userJson)");
 };

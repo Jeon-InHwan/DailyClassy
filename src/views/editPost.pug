@@ -2,6 +2,8 @@ extends base.pug
 
 block content
     h4 Update Post
+    if errorMessage 
+        span=errorMessage
     form(method="POST")
         input(placeholder="Post Title", value=post.title name="title", required) 
         input(type="text", placeholder="Content", name="content", value=post.content, maxlength=1000, minlength=2, required)

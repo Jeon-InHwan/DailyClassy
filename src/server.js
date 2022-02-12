@@ -5,7 +5,7 @@ import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import postRouter from "./routers/postRouter";
-import { localsMiddleware } from "./middleware";
+import { localsMiddleware } from "./middlewares";
 
 const app = express();
 const loggerMiddleware = morgan("dev");

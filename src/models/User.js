@@ -9,6 +9,12 @@ const userSchema = new mongoose.Schema({
     maxLength: 50,
     minLengh: 5,
   },
+  socialLoginOnly: {
+    type: Boolean,
+  },
+  avatarUrl: {
+    type: String,
+  },
   ID: {
     type: String,
     required: true,
@@ -16,7 +22,7 @@ const userSchema = new mongoose.Schema({
     maxLength: 12,
     minLengh: 5,
   },
-  password: { type: String, required: true, maxLength: 12, minLengh: 5 },
+  password: { type: String, required: false, maxLength: 12, minLengh: 5 },
   name: { type: String, required: true, minLengh: 2 },
   location: { type: String, minLengh: 2 },
 });
