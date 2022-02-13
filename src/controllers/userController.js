@@ -9,10 +9,9 @@ export const getEdit = (req, res) => {
 
 // localhost:4000/users/:id/edit (POST)
 export const postEdit = async (req, res) => {
-  const { _id } = req.session.user;
+  const { _id, avatarUrl } = req.session.user;
   const { email, name, location } = req.body;
   const { file } = req;
-  console.log(file);
   // check before update
   if (email !== req.session.user.email) {
     const emailExists = await User.exists({ email: email });
@@ -29,6 +28,7 @@ export const postEdit = async (req, res) => {
       email: email,
       name: name,
       location: location,
+      avatarUrl: file ? file.path : avatarUrl,
     },
     { new: true }
   );
@@ -173,8 +173,6 @@ export const finishGithubLogin = async (req, res) => {
       },
     });
     const emailJson = await emailRequest.json();
-    // console.log(userJson);
-    // console.log(emailJson);
     // find primary && verified email
     const emailObj = emailJson.find(
       (email) => email.primary === true && email.verified === true
