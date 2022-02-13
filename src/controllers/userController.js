@@ -4,18 +4,20 @@ import fetch from "node-fetch";
 
 // localhost:4000/users/:id/edit (GET)
 export const getEdit = (req, res) => {
-  return res.render("edit-profile.pug", { pageTitle: "Edit Profile" });
+  return res.render("user/edit-profile.pug", { pageTitle: "Edit Profile" });
 };
 
 // localhost:4000/users/:id/edit (POST)
 export const postEdit = async (req, res) => {
   const { _id } = req.session.user;
   const { email, name, location } = req.body;
+  const { file } = req;
+  console.log(file);
   // check before update
   if (email !== req.session.user.email) {
     const emailExists = await User.exists({ email: email });
     if (emailExists) {
-      return res.status(400).render("edit-profile", {
+      return res.status(400).render("user/edit-profile", {
         pageTitle: "Edit Profile",
         errorMessage: "This email is already taken!",
       });
@@ -200,4 +202,36 @@ export const finishGithubLogin = async (req, res) => {
   } else {
     return res.redirect("/login");
   }
+};
+
+// localhost:4000/users/change-password (GET)
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialLoginOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("user/change-password", { pageTitle: "Change Password" });
+};
+
+// localhost:4000/users/change-password (POST)
+export const postChangePassword = async (req, res) => {
+  const { _id, password } = req.session.user;
+  const { oldPassword, newPassword, newPasswordConfirmation } = req.body;
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("user/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match the confirmation!",
+    });
+  }
+  const passwordValidation = await bcrypt.compare(oldPassword, password);
+  if (!passwordValidation) {
+    return res.status(400).render("user/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  const user = await User.findById(_id);
+  user.password = newPassword;
+  await user.save();
+  req.session.user.password = user.password;
+  return res.redirect("/users/logout");
 };

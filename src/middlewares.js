@@ -1,4 +1,5 @@
 import session from "express-session";
+import multer from "multer";
 
 // Save session data in res.locals object
 export const localsMiddleware = (req, res, next) => {
@@ -25,3 +26,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+// multer middleware
+export const uploadMiddleware = multer({
+  dest: "uploads/",
+});

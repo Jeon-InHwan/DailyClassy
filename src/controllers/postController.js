@@ -34,7 +34,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
 
-  return res.render("editPost.pug", {
+  return res.render("post/editPost.pug", {
     pageTitle: `Edit 「${post.title}」`,
     post: post,
   });
