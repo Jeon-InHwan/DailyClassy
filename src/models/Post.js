@@ -21,6 +21,7 @@ const postSchema = new mongoose.Schema({
     views: { type: Number, default: 0 },
     rating: { type: Number, default: 0 },
   },
+  pics: [{ type: String, required: true }],
 });
 
 /*

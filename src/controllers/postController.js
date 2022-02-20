@@ -66,11 +66,21 @@ export const getUpload = (req, res) => {
 // localhost:4000/posts/upload (POST)
 export const postUpload = async (req, res) => {
   const { title, content, hashtags } = req.body;
+  const { files } = req;
+
+  if (files.length > 5) {
+    return res.status(400).render("upload.pug", {
+      pageTitle: "Upload Post",
+      errorMessage: "Too many pictures",
+    });
+  }
+
   try {
     const post = new Post({
       title: title,
       content: content,
       hashtags: Post.formatHashtags(hashtags),
+      pics: files.map((file) => file.path),
     });
     const postFromDatabase = await post.save();
   } catch (error) {

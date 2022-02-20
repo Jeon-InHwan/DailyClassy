@@ -5,7 +5,9 @@ block content
     if errorMessage
         span=errorMessage
 
-    form(method="POST")
+    form(method="POST", enctype="multipart/form-data")
+        label(for="pics") Pictures (MAX : 5 pictures)
+        input(multiple="multiple", type="file", id="pics", name="pics", accecpt="image/*", required)
         input(type="text", placeholder="Title", name="title", maxlength=50, minlength=2, required)
         input(type="text", placeholder="Content", name="content", maxlength=1000, minlength=2, required)
         input(type="text", placeholder="Hashtags, separated by comma", name="hashtags", required)
