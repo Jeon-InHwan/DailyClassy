@@ -27,7 +27,18 @@ export const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
-// multer middleware
-export const uploadMiddleware = multer({
-  dest: "uploads/",
+// multer middleware for avatar
+export const avatarUploadMiddleware = multer({
+  dest: "uploads/avatars/",
+  limits: {
+    fileSize: 30000000,
+  },
+});
+
+// multer middleware for picture
+export const pictureUploadMiddleware = multer({
+  dest: "uploads/pictures/",
+  limits: {
+    fileSize: 200000000,
+  },
 });

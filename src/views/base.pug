@@ -3,6 +3,7 @@ html(lang="ko")
     head 
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+        link(rel="stylesheet", href="/assets/css/styles.css")
     body 
         header 
             nav 
@@ -15,7 +16,7 @@ html(lang="ko")
                         li 
                             a(href="/posts/upload") Upload
                         li 
-                            a(href="/profile") #{loggedInUser.name}'s profile
+                            a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}'s profile
                         li 
                             a(href="/users/edit") Edit Profile
                         li 
@@ -29,7 +30,7 @@ html(lang="ko")
         main 
             block content
     include partials/footer.pug
-
+    script(src="/assets/js/main.js")
 
 
 

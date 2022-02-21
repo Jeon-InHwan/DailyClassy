@@ -120,9 +120,16 @@ export const logout = (req, res) => {
 };
 
 // localhost:4000/users/:id
-export const profile = (req, res) => {
-  console.log("I'm handleProfile");
-  return res.send("<h1>My profile</h1>");
+export const profile = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate("posts");
+  if (!user) {
+    return res.status(404).render("404.pug", { pageTitle: "User Not Found!" });
+  }
+  return res.render("user/profile", {
+    pageTitle: `${user.name}'Profile`,
+    user: user,
+  });
 };
 
 // localhost:4000/users/github/start (GET)

@@ -1,21 +1,32 @@
 extends base.pug
+include mixins/picture.pug
 
 block content
     div 
         h3
             a(href=`/posts/${post._id}`)=post.title
-        p=post.content
-        each hashtag in post.hashtags 
-            span #{hashtag + " "} 
-        else 
-            h4 "Can't find any hastag"
-        br
-        small=post.createdAt
-        
-    div 
-        a(href=`${post.id}/edit`) Edit Post &rarr;
-        br
-        a(href=`${post.id}/delete`) Delete Post &rarr;
+        each pic in post.pics
+            +picture(pic)
+        else    
+            h3 No Picture!
+        div 
+            p=post.content
+            each hashtag in post.hashtags 
+               span #{hashtag + " "} 
+            else 
+                h4 "Can't find any hastag"
+            br
+            small=post.createdAt
+        div 
+            small Uploaded by 
+                a(href=`/users/${post.owner._id}`) #{post.owner.name}
+
+    if String(post.owner._id) === loggedInUser._id
+        div 
+            a(href=`${post.id}/edit`) Edit Post &rarr;
+            br
+            a(href=`${post.id}/delete`) Delete Post &rarr;
+
 
         
     

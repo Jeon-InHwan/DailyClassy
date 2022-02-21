@@ -22,6 +22,7 @@ const postSchema = new mongoose.Schema({
     rating: { type: Number, default: 0 },
   },
   pics: [{ type: String, required: true }],
+  owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
 
 /*
