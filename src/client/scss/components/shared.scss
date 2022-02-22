@@ -1,0 +1,28 @@
+.auth-switch {
+  text-align: center;
+  margin-top: 40px;
+  a {
+    text-decoration: underline;
+  }
+}
+
+.empty__message {
+  display: block;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.post-grid {
+  display: grid;
+  gap: 50px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}

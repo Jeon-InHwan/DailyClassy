@@ -6,6 +6,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import postRouter from "./routers/postRouter";
 import { localsMiddleware } from "./middlewares";
+const path = require("path");
 
 const app = express();
 const loggerMiddleware = morgan("dev");
@@ -29,6 +30,10 @@ app.use(
 );
 
 app.use(localsMiddleware);
+app.use(
+  "/js",
+  express.static(path.resolve(__dirname, "..") + "/node_modules/jquery/dist")
+);
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static("assets"));
 app.use("/", rootRouter);

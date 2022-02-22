@@ -1,0 +1,50 @@
+#postContainer {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 35px;
+}
+.postTitle {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.picContainer {
+  margin-top: 25px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.eachPic {
+  img {
+    height: calc(70vh);
+    width: auto;
+    margin: 0 auto;
+  }
+}
+
+.slick-dots li button:before {
+  color: rgba(197, 194, 194, 0.596) !important;
+}
+
+.post__content {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.post__hashtag {
+  font-size: 20px;
+  color: #3ea6ff;
+}
+
+.post__createdAt {
+  display: block;
+  margin-top: 10px;
+}
+
+.post__owner {
+  display: block;
+  margin-top: 10px;
+  a {
+    color: #3ea6ff !important;
+  }
+}

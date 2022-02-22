@@ -2,36 +2,19 @@ doctype html
 html(lang="ko")
     head 
         title #{pageTitle} | #{siteName}
-        link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+        script(src="/js/jquery.js")
+        script(src="/assets/js/main.js")
+        script(type="text/javascript", src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
         link(rel="stylesheet", href="/assets/css/styles.css")
+        link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css")
+        link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css")
     body 
-        header 
-            nav 
-                ul 
-                    li 
-                        a(href="/") Home
-                    li 
-                        a(href="/search") Search
-                    if loggedIn
-                        li 
-                            a(href="/posts/upload") Upload
-                        li 
-                            a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}'s profile
-                        li 
-                            a(href="/users/edit") Edit Profile
-                        li 
-                            a(href="/users/logout") Log out
-                    else 
-                        li 
-                            a(href="/login") Log in
-                        li 
-                            a(href="/join") Join
-                    
-        main 
+        include partials/header.pug            
+        main
             block content
-    include partials/footer.pug
-    script(src="/assets/js/main.js")
-
+        include partials/footer.pug
+    block scripts
 
 
 

@@ -1,0 +1,10 @@
+.post-grid {
+  display: grid;
+  margin-top: 20px;
+  gap: 50px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.post-mixin__hashtag {
+  color: #3ea6ff;
+}

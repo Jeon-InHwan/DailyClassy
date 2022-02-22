@@ -3,10 +3,10 @@ include mixins/post.pug
 
 
 block content
-    
-    each uploaded in posts
-        +post(uploaded)
-    else    
-        h3 Noting Found! 
+    div.post-grid
+        each uploaded in posts
+            +post(uploaded)
+        else    
+            span.empty__message Nothing Found!
     
 

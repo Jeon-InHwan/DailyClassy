@@ -1,16 +1,21 @@
 mixin post(info)
-    div 
-        h4
-            a(href=`/posts/${info.id}`)=info.title
-        div #{info.meta.rating}/5.0
-        div #{info.meta.views > 1 ? info.meta.views + " views" : info.meta.views + " view"}
-        each hashtag in info.hashtags 
-            span #{hashtag + " "} 
-        else 
-            h4 "Can't find any hastag"
-        br
-        small=info.createdAt
-        hr
-
-
-
+  
+    a(href=`/posts/${info.id}`).post-mixin
+        div.post-mixin__thumb(style=`background-image: url(/${info.pics[0]}); background-size: cover; background-position: center;`) 
+        div.post-mixin__data
+            span.post-mixin__title=info.title
+            div.post-mixin__meta
+                - if (info.owner.name)
+                    span #{info.owner.name} ㆍ  
+                - if (!info.owner.name && !posts)
+                    span #{user.name} ㆍ
+                - if (!info.owner.name && posts)
+                    span #{posts.owner.name} ㆍ    
+                span #{info.meta.views > 1 ? info.meta.views + " views" : info.meta.views + " view"}
+            each hashtag in info.hashtags 
+                span.post-mixin__hashtag #{hashtag + " "} 
+            else 
+                h4 "Can't find any hastag"
+            div.post-mixin__small
+                small=info.createdAt
+        

@@ -3,9 +3,10 @@ include ../mixins/post.pug
 
 
 block content 
-    each post in user.posts
-        +post(post)
-    else 
-        h3 Noting found!
+    div.post-grid
+        each post in user.posts
+            +post(post)
+        else
+            span.empty__message Nothing Found!
 
 
