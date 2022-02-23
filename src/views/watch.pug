@@ -2,7 +2,7 @@ extends base.pug
 include mixins/picture.pug
 
 block content
-    div#postContainer
+    div#postContainer(data-id=post._id)
         a(href=`/posts/${post._id}`).postTitle=post.title
         div.picContainer 
             each pic in post.pics

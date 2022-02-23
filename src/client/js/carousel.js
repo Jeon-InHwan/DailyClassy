@@ -1,3 +1,5 @@
+const postContainer = document.getElementById("postContainer");
+
 $(document).ready(function () {
   $(".picContainer").slick({
     dots: true,
@@ -6,5 +8,11 @@ $(document).ready(function () {
     fade: true,
     cssEase: "linear",
     centerMode: true,
+  });
+
+  // Request View API when page is loaded
+  const { id } = postContainer.dataset;
+  fetch(`/api/posts/${id}/view`, {
+    method: "POST",
   });
 });

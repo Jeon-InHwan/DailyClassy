@@ -142,3 +142,83 @@ export const deletePost = async (req, res) => {
   await Post.findByIdAndDelete(id);
   return res.redirect("/");
 };
+
+// post view update request like api => localhost:4000/api/posts/:id/view (POST)
+export const registerView = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
+  if (!post) {
+    return res.sendStatus(404);
+  }
+  post.meta.views = post.meta.views + 1;
+  await post.save();
+  return res.sendStatus(200);
+};
+
+// Create post comment request like api => localhost:4000/api/posts/:id/comment (POST)
+export const createComment = async (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+  const { user } = req.session;
+
+  const post = await Post.findById(id);
+  const userInDB = await User.findById(user._id);
+
+  if (!post) {
+    //req.flash("error", "Can't post a comment now");
+    return res.sendStatus(404);
+  }
+
+  if (!userInDB) {
+    //req.flash("error", "Can't post a comment now");
+    return res.sendStatus(404);
+  }
+
+  // we have to send new comment id to the front end!!!
+  const comment = await Comment.create({
+    text: text,
+    owner: user._id,
+    post: id,
+  });
+
+  post.comments.push(comment._id);
+  post.save();
+  userInDB.comments.push(comment._id);
+  userInDB.save();
+
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+// Delete post comment request like api => localhost:4000/api/posts/:id/comment (DELETE)
+export const deleteComment = async (req, res) => {
+  const { id } = req.params;
+  const { user } = req.session;
+  const { commentId } = req.body;
+
+  const post = await Post.findById(id);
+  const userInDB = await User.findById(user._id);
+  const comment = await Comment.findById(commentId);
+
+  if (!post) {
+    //req.flash("error", "Can't delete a comment now");
+    return res.sendStatus(404);
+  }
+
+  if (!userInDB) {
+    //req.flash("error", "Can't delete a comment now");
+    return res.sendStatus(404);
+  }
+
+  if (String(comment.owner) !== String(req.session.user._id)) {
+    //req.flash("error", "Can't delete a comment");
+    return res.sendStatus(404);
+  }
+
+  await Comment.findByIdAndDelete(commentId);
+  post.comments.pull(commentId);
+  post.save();
+  userInDB.comments.pull(commentId);
+  userInDB.save();
+
+  return res.sendStatus(201);
+};
