@@ -33,6 +33,7 @@ export const postEdit = async (req, res) => {
     { new: true }
   );
   req.session.user = updatedUser;
+  req.flash("info", "User updated!");
   return res.redirect("/users/edit");
 };
 
@@ -79,7 +80,7 @@ export const postJoin = async (req, res) => {
       .status(400)
       .render("join", { pageTitle: "Join", errorMessage: error._message });
   }
-
+  req.flash("info", "Account created!");
   return res.redirect("/login");
 };
 
@@ -110,12 +111,16 @@ export const postLogin = async (req, res) => {
   // Save user data in session
   req.session.loggedIn = true;
   req.session.user = user;
+  req.flash("info", "Welcome!");
   res.redirect("/");
 };
 
 // localhost:4000/users/logout
 export const logout = (req, res) => {
-  req.session.destroy();
+  req.session.user = null;
+  res.locals.loggedInUser = req.session.user;
+  req.session.loggedIn = false;
+  req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
 
@@ -186,6 +191,7 @@ export const finishGithubLogin = async (req, res) => {
       (email) => email.primary === true && email.verified === true
     );
     if (!emailObj) {
+      req.flash("error", "Not Authorized!");
       return res.redirect("/login");
     }
     // find local user with given email from github
@@ -213,6 +219,7 @@ export const finishGithubLogin = async (req, res) => {
 // localhost:4000/users/change-password (GET)
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialLoginOnly === true) {
+    req.flash("error", "You logged in with social account!");
     return res.redirect("/");
   }
   return res.render("user/change-password", { pageTitle: "Change Password" });
@@ -239,5 +246,6 @@ export const postChangePassword = async (req, res) => {
   user.password = newPassword;
   await user.save();
   req.session.user.password = user.password;
+  req.flash("info", "Password updated!");
   return res.redirect("/users/logout");
 };

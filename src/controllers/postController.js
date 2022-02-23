@@ -40,6 +40,7 @@ export const getEdit = async (req, res) => {
   }
 
   if (String(post.owner) !== req.session.user._id) {
+    req.flash("error", "Not Authorized!");
     return res.status(403).redirect("/");
   }
 
@@ -58,6 +59,7 @@ export const postEdit = async (req, res) => {
     return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
   if (String(post.owner) !== req.session.user._id) {
+    req.flash("error", "Not Authorized!");
     return res.status(403).redirect("/");
   }
   await Post.findByIdAndUpdate(id, {
@@ -65,6 +67,7 @@ export const postEdit = async (req, res) => {
     content: content,
     hashtags: Post.formatHashtags(hashtags),
   });
+  req.flash("info", "Post edited!");
   return res.redirect(`/posts/${id}`);
 };
 
@@ -109,7 +112,7 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message,
     });
   }
-
+  req.flash("info", "Post uploaded!");
   return res.redirect("/");
 };
 
@@ -136,10 +139,12 @@ export const deletePost = async (req, res) => {
     return res.status(404).render("404.pug", { pageTitle: "Post Not Found!" });
   }
   if (String(post.owner) !== req.session.user._id) {
+    req.flash("error", "Not Authorized!");
     return res.status(403).redirect("/");
   }
   // delete post
   await Post.findByIdAndDelete(id);
+  req.flash("info", "Post deleted");
   return res.redirect("/");
 };
 
