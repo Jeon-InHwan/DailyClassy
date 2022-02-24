@@ -4,9 +4,15 @@ import User from "../models/User";
 // localhost:4000
 export const home = async (req, res) => {
   try {
-    const posts = await Post.find({})
-      .sort({ createdAt: "desc" })
-      .populate("owner");
+    const { page, perPage } = req.query;
+    const options = {
+      sort: { createdAt: "desc" },
+      populate: "owner",
+      page: parseInt(page, 10) || 1,
+      limit: parseInt(perPage, 8) || 8,
+    };
+    const posts = await Post.paginate({}, options);
+    console.log(posts);
     return res.render("home.pug", { pageTitle: "Home", posts });
   } catch (error) {
     return res.render("404.pug", { error });
@@ -226,4 +232,22 @@ export const deleteComment = async (req, res) => {
   userInDB.save();
 
   return res.sendStatus(201);
+};
+
+// more posts
+export const morePosts = async (req, res) => {
+  let posts;
+  try {
+    const { page } = req.query;
+    const options = {
+      sort: { createdAt: "desc" },
+      populate: "owner",
+      page: page,
+      limit: 8,
+    };
+    posts = await Post.paginate({}, options);
+  } catch {
+    return res.sendStatus(404);
+  }
+  res.status(200).json(posts);
 };

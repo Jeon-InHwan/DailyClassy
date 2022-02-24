@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate";
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -38,6 +39,8 @@ postSchema.static("formatHashtags", function (hashtags) {
     .split(",")
     .map((word) => (word.startsWith("#") ? word : `#${word}`));
 });
+
+postSchema.plugin(mongoosePaginate);
 
 const Post = mongoose.model("Post", postSchema);
 export default Post;

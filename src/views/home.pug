@@ -3,7 +3,27 @@ include mixins/post.pug
 
 
 block content
-    div.post-grid
+
+    div.post-grid 
+        each uploaded in posts.docs 
+            a(href=`/posts/${uploaded.id}`).post-mixin
+                div.post-mixin__thumb(style=`background-image: url(/${uploaded.pics[0]}); background-size: cover; background-position: center;`) 
+                div.post-mixin__data
+                    span.post-mixin__title=uploaded.title
+                    div.post-mixin__meta
+                        span #{uploaded.owner.name} ㆍ   
+                        span #{uploaded.meta.views > 1 ? uploaded.meta.views + " views" : uploaded.meta.views + " view"}
+                    each hashtag in uploaded.hashtags 
+                        span.post-mixin__hashtag #{hashtag + " "} 
+                    else 
+                        h4 "Can't find any hastag"
+                    div.post-mixin__small
+                        small=uploaded.createdAt
+                    
+block scripts 
+    script(src="/assets/js/home.js")
+
+    //div.post-grid
         each uploaded in posts
             +post(uploaded)
         else    

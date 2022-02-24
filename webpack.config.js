@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     main: "./src/client/js/main.js",
     carousel: "./src/client/js/carousel.js",
+    home: "./src/client/js/home.js",
   },
   mode: "development",
   watch: true,
