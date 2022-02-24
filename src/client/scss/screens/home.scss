@@ -8,3 +8,18 @@
 .post-mixin__hashtag {
   color: #3ea6ff;
 }
+
+.moreBtn {
+  margin: 0 auto;
+  margin-top: 50px;
+  text-align: center;
+  max-width: 200px;
+  padding: 10px 20px;
+  border-radius: 10000px;
+  font-weight: 600;
+  background-color: #238636;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+}
